@@ -2,8 +2,9 @@
   "name": "moeb-react",
   "version": "0.1.0",
   "engines": {
-    "node": "12.11.1"
-    },
+    "node": "12.11.1",
+    "npm": "1.4.29"
+  },
   "private": true,
   "dependencies": {
     "@testing-library/jest-dom": "^4.2.4",
