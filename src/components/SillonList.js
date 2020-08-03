@@ -71,7 +71,7 @@ const SillonList = () => {
                         sillones.map((sillon, index) => (
                             <li
                                 className={
-                                    "list-group-item " + (index === currentIndex ? "active" : "")
+                                    "list-group-item list-group-item-action " + (index === currentIndex ? "active" : "")
                                 }
                                 onClick={() => setActiveSillon(sillon, index)}
                                 key={index}
