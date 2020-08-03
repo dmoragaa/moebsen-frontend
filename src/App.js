@@ -32,7 +32,6 @@ function App() {
   );
 }
  */
-var port = process.env.PORT || 3000
 
 function App() {
   return (
@@ -68,8 +67,5 @@ function App() {
   );
 }
 
-server.listen(port, function() {
-  console.log("App is running on port " + port);
-});
 
 export default App;
