@@ -2,10 +2,8 @@ import React, { useState, useEffect } from "react";
 import SillonDataService from "../services/SillonService";
 import { Link } from "react-router-dom";
 
-const SillonList = () => {
+const SillonList = props => {
     const [sillones, setSillones] = useState([]);
-    const [currentSillon, setCurrentSillon] = useState(null);
-    const [currentIndex, setCurrentIndex] = useState(-1);
     //dejado como idea, aun no sabemos como implementar busqueda.
     //const [searchTitle, setSearchTitle] = useState("");
 
@@ -30,17 +28,20 @@ const SillonList = () => {
             });
     };
 
-    /*
+
     const refreshList = () => {
         retrieveSillones();
-        setCurrentSillon(null);
-        setCurrentIndex(-1);
     };
-    */
 
-    const setActiveSillon = (sillon, index) => {
-        setCurrentSillon(sillon);
-        setCurrentIndex(index);
+    const deleteSillon = id => {
+        SillonDataService.remove(id)
+            .then(response => {
+                console.log(response.data);
+                refreshList();
+            })
+            .catch(e => {
+                console.log(e);
+            });
     };
 
     /*
@@ -58,71 +59,60 @@ const SillonList = () => {
 
     return (
         <div className="list row">
-            <div className="col-md-8">
-                <div className="input-group mb-3">
+            <div className="col-md-12">
+                <div className="mb-3">
+                    <h1>Listado de Sillones</h1>
                     Acá iría una busqueda
                 </div>
             </div>
-            <div className="col-md-6">
-                <h4>Listado de Sillones</h4>
-
-                <ul className="list-group">
-                    {sillones &&
-                        sillones.map((sillon, index) => (
-                            <li
-                                className={
-                                    "list-group-item list-group-item-action " + (index === currentIndex ? "active" : "")
-                                }
-                                onClick={() => setActiveSillon(sillon, index)}
-                                key={index}
-                            >
-                                {"Sillón " + sillon.id}
-                            </li>
-                        ))}
-                </ul>
-            </div>
-            <div className="col-md-6">
-                {currentSillon ? (
-                    <div>
-                        <h4> Sillón</h4>
-                        <div>
-                            <label>
-                                <strong>ID:</strong>
-                            </label>{" "}
-                            {currentSillon.id}
-                        </div>
-                        <div>
-                            <label>
-                                <strong>ID Sala:</strong>
-                            </label>{" "}
-                            {currentSillon.id_sala}
-                        </div>
-                        <div>
-                            <label>
-                                <strong>Tipo:</strong>
-                            </label>{" "}
-                            {currentSillon.tipo}
-                        </div>
-                        <div>
-                            <label>
-                                <strong>Estado:</strong>
-                            </label>{" "}
-                            {currentSillon.activo ? "Activo" : "No Activo"}
-                        </div>
-
-                        <Link
-                            to={"/sillones/" + currentSillon.id}
-                            className="badge badge-warning"
-                        >
-                            Editar
-                        </Link>
+            <div className="col-md-12">
+                {sillones.length !== 0 ? (
+                    <div className="overflow-auto">
+                    <table className="table table-striped">
+                        <thead>
+                            <tr>
+                                <th scope="col">Nombre</th>
+                                <th scope="col">Tipo</th>
+                                <th scope="col" className="text-center">Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {sillones &&
+                                sillones.map((sillon) => (
+                                    <tr key={sillon.id}>
+                                        <td>{sillon.codigo}</td>
+                                        <td>{sillon.tipo}</td>
+                                        <td>
+                                            <div className="d-flex justify-content-center">
+                                                <Link
+                                                    to={"/sillones/" + sillon.id}
+                                                    className="btn btn-primary m-1"
+                                                >
+                                                    Editar
+                                    </Link>
+                                                <button className="btn btn-danger m-1" onClick={() => deleteSillon(sillon.id)}>
+                                                    Eliminar
+                                    </button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                ))}
+                        </tbody>
+                    </table>
                     </div>
                 ) : (
-                        <div>
+                        <div className="d-flex justify-content-center m-2">
+                            <div className="spinner-border text-primary mx-2" role="status">
+                                <span className="sr-only">Loading...</span>
+                            </div>
+                            <strong>Cargando, un momento...</strong>
                             <br />
-                            <p>Seleccione un Sillón para ver más detalles</p>
                         </div>
                     )}
+
+                <Link to={"/add"} className="btn btn-primary mt-2">
+                    Nuevo Sillón
+              </Link>
             </div>
         </div>
     );

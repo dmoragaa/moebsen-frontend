@@ -1,15 +1,15 @@
 import React, { useState, useEffect } from "react";
 import SillonDataService from "../services/SillonService";
+import { Link } from "react-router-dom";
 
 const Sillon = props => {
     const initialSillonState = {
         id: null,
+        codigo: "",
         tipo: "",
-        activo: true,
-        id_sala: ""
+        activo: true
     };
     const [currentSillon, setCurrentSillon] = useState(initialSillonState);
-    const [message, setMessage] = useState("");
 
     const getSillon = id => {
         SillonDataService.get(id)
@@ -31,40 +31,11 @@ const Sillon = props => {
         setCurrentSillon({ ...currentSillon, [name]: value });
     };
 
-    const updateActivo = status => {
-        var data = {
-            id: currentSillon.id,
-            tipo: currentSillon.tipo,
-            id_sala: currentSillon.id_sala,
-            activo: status
-        };
-
-        SillonDataService.update(currentSillon.id, data)
-            .then(response => {
-                setCurrentSillon({ ...currentSillon, activo: status });
-                console.log(response.data);
-            })
-            .catch(e => {
-                console.log(e);
-            });
-    };
-
     const updateSillon = () => {
         SillonDataService.update(currentSillon.id, currentSillon)
             .then(response => {
                 console.log(response.data);
-                setMessage("El sillón ha sido actualizado correctamente.");
-            })
-            .catch(e => {
-                console.log(e);
-            });
-    };
-
-    const deleteSillon = () => {
-        SillonDataService.remove(currentSillon.id)
-            .then(response => {
-                setCurrentSillon({ ...currentSillon, activo: !currentSillon.activo});
-                console.log(response.data);
+                props.history.push("/sillones");
             })
             .catch(e => {
                 console.log(e);
@@ -73,10 +44,21 @@ const Sillon = props => {
 
     return (
         <div>
-            {currentSillon ? (
+            <h1>Editar Sillón</h1>
+            {currentSillon.id ? (
                 <div className="edit-form">
-                    <h4>Sillón</h4>
                     <form>
+                        <div className="form-group">
+                            <label htmlFor="codigo">Nombre Sillón</label>
+                            <input
+                                type="text"
+                                className="form-control"
+                                id="codigo"
+                                name="codigo"
+                                value={currentSillon.codigo}
+                                onChange={handleInputChange}
+                            />
+                        </div>
                         <div className="form-group">
                             <label htmlFor="tipo">Tipo de Sillón</label>
                             <input
@@ -89,17 +71,6 @@ const Sillon = props => {
                             />
                         </div>
                         <div className="form-group">
-                            <label htmlFor="id_sala">ID Sala</label>
-                            <input
-                                type="number"
-                                className="form-control"
-                                id="id_sala"
-                                name="id_sala"
-                                value={currentSillon.id_sala}
-                                onChange={handleInputChange}
-                            />
-                        </div>
-                        <div className="form-group">
                             <label>
                                 <strong>Estado: </strong>
                             </label>
@@ -107,32 +78,34 @@ const Sillon = props => {
                         </div>
                     </form>
 
-                    {currentSillon.activo ? (
-                        <button className="badge badge-danger mr-2" onClick={deleteSillon}>
-                            Desactivar
-                        </button>
-                    ) : (
-                            <button
-                                className="badge badge-primary mr-2"
-                                onClick={() => updateActivo(true)}
-                            >
-                                Activar
-                            </button>
-                        )}
-
                     <button
                         type="submit"
-                        className="badge badge-success"
+                        className="btn btn-primary"
                         onClick={updateSillon}>
                         Actualizar
                         </button>
-
-                    <p>{message}</p>
+                    <Link
+                        to={"/sillones"}
+                        className="btn btn-outline-dark m-2"
+                    >
+                        Volver
+                    </Link>
                 </div>
             ) : (
                     <div>
-                        <br />
-                        <p>Seleccione un Sillón para ver más detalles</p>
+                        <div className="d-flex justify-content-center my-2">
+                            <div className="spinner-border text-primary mx-2" role="status">
+                                <span className="sr-only">Loading...</span>
+                            </div>
+                            <strong>Cargando, un momento...</strong>
+                            <br />
+                        </div>
+                        <Link
+                            to={"/sillones"}
+                            className="btn btn-outline-dark m-2"
+                        >
+                            Volver
+                        </Link>
                     </div>
                 )}
         </div>

@@ -39,17 +39,12 @@ function App() {
       <div>
         <nav className="navbar navbar-expand navbar-dark bg-dark">
           <a href="/sillones" className="navbar-brand">
-            Sillones
+            MoebSen
           </a>
           <div className="navbar-nav mr-auto">
             <li className="nav-item">
               <Link to={"/sillones"} className="nav-link">
-                Ver Sillones
-              </Link>
-            </li>
-            <li className="nav-item">
-              <Link to={"/add"} className="nav-link">
-                Nuevo Sillón
+                Sillones
               </Link>
             </li>
           </div>

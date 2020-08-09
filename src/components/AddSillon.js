@@ -1,10 +1,8 @@
 import React, { useState } from "react";
 import SillonDataService from "../services/SillonService";
+import { Link } from "react-router-dom";
 
-//function AddSillon(){
-//    return "Add Sillon";
-//
-const AddSillon = () => {
+const AddSillon = props => {
     const initialSillonState = {
         id: null,
         tipo: "",
@@ -12,7 +10,6 @@ const AddSillon = () => {
         id_sala: ""
     };
     const [sillon, setSillon] = useState(initialSillonState);
-    const [submitted, setSubmitted] = useState(false);
 
     const handleInputChange = event => {
         const { name, value } = event.target;
@@ -23,7 +20,7 @@ const AddSillon = () => {
         var data = {
             tipo: sillon.tipo,
             activo: sillon.activo,
-            id_sala: sillon.id_sala
+            codigo: sillon.codigo
         };
 
         SillonDataService.create(data)
@@ -32,76 +29,59 @@ const AddSillon = () => {
                     id: response.data.id,
                     tipo: response.data.tipo,
                     activo: response.data.activo,
-                    id_sala: response.data.id_sala
+                    codigo: response.data.codigo
                 });
-                setSubmitted(true);
                 console.log(response.data);
+                props.history.push("/sillones");
             })
             .catch(e => {
                 console.log(e);
             });
     };
 
-    const newSillon = () => {
-        setSillon(initialSillonState);
-        setSubmitted(false);
-    }
-
     return (
-        <div className="submit-form">
-            {submitted ? (
-                <div>
-                    <h4>Sillón ha sido añadido exitósamente!</h4>
-                    <button className="btn btn-success" onClick={newSillon}>
-                        Nuevo Sillón
-                    </button>
-                </div>
-            ) : (
-                    <div>
+        <div>
+            <h1>Nuevo Sillón</h1>
+                <div className="edit-form">
+                    <form>
+                        <div className="form-group">
+                            <label htmlFor="codigo">Nombre Sillón</label>
+                            <input
+                                type="text"
+                                className="form-control"
+                                id="codigo"
+                                name="codigo"
+                                value={sillon.codigo}
+                                onChange={handleInputChange}
+                            />
+                        </div>
                         <div className="form-group">
                             <label htmlFor="tipo">Tipo de Sillón</label>
                             <input
                                 type="text"
                                 className="form-control"
                                 id="tipo"
-                                required
+                                name="tipo"
                                 value={sillon.tipo}
                                 onChange={handleInputChange}
-                                name="tipo"
                             />
                         </div>
-                        <div className="form-group">
-                            <label htmlFor="id_sala">ID Sala</label>
-                            <input
-                                type="number"
-                                className="form-control"
-                                id="id_sala"
-                                required
-                                value={sillon.id_sala}
-                                onChange={handleInputChange}
-                                name="id_sala"
-                            />
-                        </div>
-                        <div className="form-group">
-                            <label htmlFor="activo">Activo</label>
-                            <select
-                                value={sillon.activo}
-                                className="form-control"
-                                id="activo"
-                                required
-                                onChange={handleInputChange}
-                                name="activo">
-                                <option value="true">Si</option>
-                                <option value="false">No</option>
-                            </select>
-                        </div>
+                    </form>
 
-                        <button onClick={saveSillon} className="btn btn-success">
-                            Enviar
+                    <button
+                        type="submit"
+                        className="btn btn-primary"
+                        onClick={saveSillon}>
+                        Guardar
                         </button>
-                    </div>
-                )}
+                    <Link
+                        to={"/sillones"}
+                        className="btn btn-outline-dark m-2"
+                    >
+                        Volver
+                    </Link>
                 </div>
+        </div>
     );
 };
 
