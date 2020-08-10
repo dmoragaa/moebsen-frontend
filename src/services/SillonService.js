@@ -4,6 +4,12 @@ const getAll = () => {
   return http.get("/sillones");
 };
 
+const getFiltered = filters => {
+  return http.get("/sillones", {
+    params: filters
+  })
+}
+
 const get = id => {
   return http.get(`/sillones/${id}`);
 };
@@ -22,6 +28,7 @@ const remove = id => {
 
 export default {
   getAll,
+  getFiltered,
   get,
   create,
   update,

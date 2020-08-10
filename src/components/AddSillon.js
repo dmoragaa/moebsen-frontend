@@ -7,7 +7,7 @@ const AddSillon = props => {
         id: null,
         tipo: "",
         activo: true,
-        id_sala: ""
+        codigo: ""
     };
     const [sillon, setSillon] = useState(initialSillonState);
 
@@ -53,6 +53,7 @@ const AddSillon = props => {
                                 name="codigo"
                                 value={sillon.codigo}
                                 onChange={handleInputChange}
+                                required
                             />
                         </div>
                         <div className="form-group">
@@ -64,6 +65,7 @@ const AddSillon = props => {
                                 name="tipo"
                                 value={sillon.tipo}
                                 onChange={handleInputChange}
+                                required
                             />
                         </div>
                     </form>
