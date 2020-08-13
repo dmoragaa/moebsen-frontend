@@ -156,7 +156,7 @@ const SillonList = props => {
             </div>
             <div className="col-md-12">
                 {!waitingQuery ? (
-                    <div className="overflow-auto">
+                    <div className="overflow-auto table-sillones">
                         <table className="table table-striped">
                             <thead>
                                 <tr>
@@ -210,7 +210,7 @@ const SillonList = props => {
                     )
                 }
 
-                <Link to={"/add"} className="btn btn-primary mt-2">
+                <Link to={"/sillones/add"} className="btn btn-primary mt-2">
                     Nuevo Sillón
               </Link>
             </div >
